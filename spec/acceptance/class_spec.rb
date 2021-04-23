@@ -19,11 +19,13 @@ describe 'rabbitmq class:' do
   context 'default class inclusion' do
     let(:pp) do
       <<-EOS
-      class { 'rabbitmq': }
-      if $facts['os']['family'] == 'RedHat' {
-        class { 'erlang': epel_enable => true}
+        class { 'erlang': }
         Class['erlang'] -> Class['rabbitmq']
-      }
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
+        }
+        class { 'rabbitmq': }
       EOS
     end
 
@@ -55,13 +57,13 @@ describe 'rabbitmq class:' do
   context 'disable and stop service' do
     let(:pp) do
       <<-EOS
-        class { 'rabbitmq':
-          service_ensure => 'stopped',
-        }
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
         if $facts['os']['family'] == 'RedHat' {
-          class { 'erlang': epel_enable => true}
-          Class['erlang'] -> Class['rabbitmq']
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
         }
+        class { 'rabbitmq': }
       EOS
     end
 
@@ -76,21 +78,25 @@ describe 'rabbitmq class:' do
   context 'service is unmanaged' do
     it 'runs successfully' do
       pp_pre = <<-EOS
-        class { 'rabbitmq': }
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
         if $facts['os']['family'] == 'RedHat' {
-          class { 'erlang': epel_enable => true}
-          Class['erlang'] -> Class['rabbitmq']
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
         }
+        class { 'rabbitmq': }
       EOS
 
       pp = <<-EOS
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
+        }
         class { 'rabbitmq':
           service_manage => false,
           service_ensure  => 'stopped',
-        }
-        if $facts['os']['family'] == 'RedHat' {
-          class { 'erlang': epel_enable => true}
-          Class['erlang'] -> Class['rabbitmq']
         }
       EOS
 
@@ -107,6 +113,12 @@ describe 'rabbitmq class:' do
   context 'binding on all interfaces' do
     let(:pp) do
       <<-EOS
+      class { 'erlang': }
+      Class['erlang'] -> Class['rabbitmq']
+      if $facts['os']['family'] == 'RedHat' {
+        class { 'epel': }
+        Class['epel'] -> Class['rabbitmq']
+      }
       class { 'rabbitmq':
         service_manage    => true,
         port              => 5672,
@@ -137,6 +149,12 @@ describe 'rabbitmq class:' do
   context 'binding to localhost only' do
     let(:pp) do
       <<-EOS
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
+        }
         class { 'rabbitmq':
           service_manage    => true,
           port              => 5672,
@@ -168,6 +186,12 @@ describe 'rabbitmq class:' do
   context 'ssl enabled' do
     let(:pp) do
       <<-EOS
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
+        }
         class { 'rabbitmq':
           service_manage  => true,
           admin_enable    => true,
@@ -197,6 +221,12 @@ describe 'rabbitmq class:' do
   context 'different management_ip_address and node_ip_address' do
     let(:pp) do
       <<-EOS
+        class { 'erlang': }
+        Class['erlang'] -> Class['rabbitmq']
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'epel': }
+          Class['epel'] -> Class['rabbitmq']
+        }
         class { 'rabbitmq':
           service_manage        => true,
           port                  => 5672,

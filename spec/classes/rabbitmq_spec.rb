@@ -25,21 +25,6 @@ describe 'rabbitmq' do
       end
 
       context 'with default params' do
-        it { is_expected.not_to contain_class('rabbitmq::repo::apt') }
-        it { is_expected.not_to contain_apt__source('rabbitmq') }
-        it { is_expected.not_to contain_class('rabbitmq::repo::rhel') }
-        it { is_expected.not_to contain_yumrepo('rabbitmq') }
-      end
-
-      context 'with service_restart => false' do
-        let(:params) { { service_restart: false } }
-
-        it { is_expected.not_to contain_class('rabbitmq::config').that_notifies('Class[rabbitmq::service]') }
-      end
-
-      context 'with repos_ensure => true' do
-        let(:params) { { repos_ensure: true } }
-
         if facts[:os]['family'] == 'Debian'
           it 'includes rabbitmq::repo::apt' do
             is_expected.to contain_class('rabbitmq::repo::apt').
@@ -72,6 +57,21 @@ describe 'rabbitmq' do
           it { is_expected.not_to contain_class('rabbitmq::repo::rhel') }
           it { is_expected.not_to contain_yumrepo('rabbitmq') }
         end
+      end
+
+      context 'with service_restart => false' do
+        let(:params) { { service_restart: false } }
+
+        it { is_expected.not_to contain_class('rabbitmq::config').that_notifies('Class[rabbitmq::service]') }
+      end
+
+      context 'with repos_ensure => false' do
+        let(:params) { { repos_ensure: false } }
+
+        it { is_expected.not_to contain_class('rabbitmq::repo::apt') }
+        it { is_expected.not_to contain_apt__source('rabbitmq') }
+        it { is_expected.not_to contain_class('rabbitmq::repo::rhel') }
+        it { is_expected.not_to contain_yumrepo('rabbitmq') }
       end
 
       context 'with no pin', if: facts[:os]['family'] == 'Debian' do

@@ -4,6 +4,12 @@ describe 'rabbitmq clustering' do
   context 'rabbitmq::wipe_db_on_cookie_change => false' do
     it 'runs successfully' do
       pp = <<-EOS
+      class { 'erlang': }
+      Class['erlang'] -> Class['rabbitmq']
+      if $facts['os']['family'] == 'RedHat' {
+        class { 'epel': }
+        Class['epel'] -> Class['rabbitmq']
+      }
       class { 'rabbitmq':
         cluster                  => { 'name' => 'rabbit_cluster', 'init_node' => $facts['fqdn'] },
         config_cluster           => true,
@@ -12,10 +18,6 @@ describe 'rabbitmq clustering' do
         environment_variables    => { 'RABBITMQ_USE_LONGNAME' => true },
         erlang_cookie            => 'TESTCOOKIE',
         wipe_db_on_cookie_change => false,
-      }
-      if $facts['os']['family'] == 'RedHat' {
-        class { 'erlang': epel_enable => true}
-        Class['erlang'] -> Class['rabbitmq']
       }
       EOS
 
@@ -29,6 +31,12 @@ describe 'rabbitmq clustering' do
   context 'rabbitmq::wipe_db_on_cookie_change => true' do
     it 'runs successfully' do
       pp = <<-EOS
+      class { 'erlang': }
+      Class['erlang'] -> Class['rabbitmq']
+      if $facts['os']['family'] == 'RedHat' {
+        class { 'epel': }
+        Class['epel'] -> Class['rabbitmq']
+      }
       class { 'rabbitmq':
         cluster                  => { 'name' => 'rabbit_cluster', 'init_node' => $facts['fqdn'] },
         config_cluster           => true,
@@ -37,10 +45,6 @@ describe 'rabbitmq clustering' do
         environment_variables    => { 'RABBITMQ_USE_LONGNAME' => true },
         erlang_cookie            => 'TESTCOOKIE',
         wipe_db_on_cookie_change => true,
-      }
-      if $facts['os']['family'] == 'RedHat' {
-        class { 'erlang': epel_enable => true}
-        Class['erlang'] -> Class['rabbitmq']
       }
       EOS
 

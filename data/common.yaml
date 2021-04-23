@@ -30,7 +30,7 @@ rabbitmq::package_gpg_key: ~
 rabbitmq::package_name: 'rabbitmq'
 rabbitmq::package_source: ~
 rabbitmq::package_provider: ~
-rabbitmq::repos_ensure: false
+rabbitmq::repos_ensure: true
 rabbitmq::manage_python: true
 rabbitmq::python_package: 'python'
 rabbitmq::rabbitmq_user: 'rabbitmq'

@@ -209,7 +209,7 @@
 #   Name of the package required by rabbitmqadmin.
 # @param repos_ensure
 #   Ensure that a repo with the official (and newer) RabbitMQ package is configured, along with its signing key.
-#   Defaults to false (use system packages). This does not ensure that soft dependencies (like EPEL on RHEL systems) are present.
+#   Defaults to true (use RabbitMQ repos). This does not ensure that soft dependencies (like EPEL on RHEL systems) are present.
 #   It also does not solve the erlang dependency.  See https://www.rabbitmq.com/which-erlang.html for a good breakdown of the
 #   different ways of handling the erlang deps.  See also https://github.com/voxpupuli/puppet-rabbitmq/issues/788
 # @param service_ensure
@@ -346,7 +346,7 @@ class rabbitmq (
   Variant[String, Array] $package_name                                                             = 'rabbitmq',
   Optional[String] $package_source                                                                 = undef,
   Optional[String] $package_provider                                                               = undef,
-  Boolean $repos_ensure                                                                            = false,
+  Boolean $repos_ensure                                                                            = true,
   Boolean $manage_python                                                                           = true,
   String $python_package                                                                           = 'python',
   String $rabbitmq_user                                                                            = 'rabbitmq',
