@@ -28,7 +28,7 @@ DESC
 
   newparam(:name, namevar: true) do
     desc 'Name of queue'
-    newvalues(%r{^\S*@\S+$})
+    newvalues(%r{^.*@.*$})
   end
 
   newparam(:durable) do
