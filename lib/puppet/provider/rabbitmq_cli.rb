@@ -38,7 +38,7 @@ class Puppet::Provider::RabbitmqCli < Puppet::Provider
     return @rabbitmq_version if defined? @rabbitmq_version
 
     output = rabbitmqctl('-q', 'status')
-    version = output.match(%r{RabbitMQ.*?([\d\.]+)})
+    version = output.match(%r{(?:\{rabbit,"RabbitMQ","|RabbitMQ version: )([\d\.]+)})
     @rabbitmq_version = version[1] if version
     @rabbitmq_version
   end
